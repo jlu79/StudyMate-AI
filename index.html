@@ -29,8 +29,8 @@
   </nav>
   <div class="sidebar-footer">
     <div class="avatar">
-      <div class="avatar-img">JL</div>
-      <div><div class="avatar-info">Jianbin Lu</div><div class="avatar-sub">s4175571 · RMIT</div></div>
+      <div class="avatar-img" id="user-avatar-initials">?</div>
+      <div><div class="avatar-info" id="user-display-name">Student</div><div class="avatar-sub"><span id="user-student-id">—</span> · RMIT</div></div>
     </div>
   </div>
 </div>
@@ -49,7 +49,7 @@
 <!-- 1. HOME / DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="topbar">
-    <div><div class="page-title">Good morning, Jianbin 👋</div><div class="page-sub">Tuesday, 26 May 2026 — Your study overview</div></div>
+    <div><div class="page-title">Good morning, <span id="user-greeting-name">Student</span> 👋</div><div class="page-sub">Tuesday, 26 May 2026 — Your study overview</div></div>
   </div>
 
   <div class="cta-card">
@@ -62,6 +62,291 @@
 
   <div class="grid4" style="margin-bottom:16px">
     <div class="metric"><div class="metric-icon">📚</div><div class="metric-val">4</div><div class="metric-label">Active Courses</div></div>
+    <div class="metric"><div class="metric-icon">✅</div><div class="metric-val" id="done-count">2/5</div><div class="metric-label">Tasks Done Today</div></div>
+    <div class="metric"><div class="metric-icon">📋</div><div class="metric-val">1</div><div class="metric-label">Briefs Analysed</div></div>
+    <div class="metric"><div class="metric-icon">🎯</div><div class="metric-val">78%</div><div class="metric-label">Overall Readiness</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Today's Tasks</div>
+      <div id="task-list">
+        <div class="task-item">
+          <div class="checkbox checked" onclick="toggle(this)">✓</div>
+          <div><div class="task-name done">Read Chapter 4 — Foundations of AI</div><div class="task-meta"><span class="badge b-blue">COSC2960</span> 45 min</div></div>
+        </div>
+        <div class="task-item">
+          <div class="checkbox checked" onclick="toggle(this)">✓</div>
+          <div><div class="task-name done">Review lecture slides — Structural Analysis</div><div class="task-meta"><span class="badge b-amber">CIVE1234</span> 30 min</div></div>
+        </div>
+        <div class="task-item">
+          <div class="checkbox" onclick="toggle(this)"></div>
+          <div><div class="task-name">Draft mock-up pages — Assignment 3</div><div class="task-meta"><span class="badge b-blue">COSC2960</span> 60 min · <strong style="color:var(--red)">Due soon</strong></div></div>
+        </div>
+        <div class="task-item">
+          <div class="checkbox" onclick="toggle(this)"></div>
+          <div><div class="task-name">Practice problem set 3 — Calculus II</div><div class="task-meta"><span class="badge b-red">MATH1234</span> 60 min</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Recent Activity</div>
+      <div class="exam-item"><div class="exam-dot" style="background:var(--blue)"></div><div style="flex:1"><div class="exam-name">Assignment 3 brief uploaded</div><div class="exam-sub">COSC2960 · Mock AI analysis complete</div></div><span class="badge b-green">Done</span></div>
+      <div class="exam-item"><div class="exam-dot" style="background:var(--amber)"></div><div style="flex:1"><div class="exam-name">Weekly plan generated</div><div class="exam-sub">19–25 May 2026</div></div><span class="badge b-amber">Active</span></div>
+      <div class="ai-tip" style="margin-top:14px">
+        <div class="ai-tip-label">✨ Prototype note</div>
+        <div class="ai-tip-text">This is a clickable web prototype. No real API, login, or database — all interactions are simulated in the browser.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. UPLOAD ASSIGNMENT BRIEF -->
+<div class="page" id="page-upload">
+  <div class="page-title">Upload Assignment Brief</div>
+  <div class="page-sub">Upload your PDF or paste details — StudyMate AI will summarise requirements (mock)</div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="form-group">
+      <label class="form-label">Assignment title</label>
+      <input type="text" id="brief-title" value="Assignment 3 — AI Study Planner Prototype">
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label class="form-label">Course</label>
+        <select>
+          <option>COSC2960 — Foundations of AI</option>
+          <option>MATH1234 — Calculus II</option>
+          <option>CIVE1234 — Structural Analysis</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Due date</label>
+        <input type="text" value="14 June 2026, 11:59 PM">
+      </div>
+    </div>
+    <div class="upload-zone" id="upload-zone" onclick="mockUpload()">
+      <div class="upload-icon">📄</div>
+      <div style="font-size:15px;font-weight:600">Click to upload assignment brief</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:6px">PDF, DOCX up to 10 MB (simulated)</div>
+      <div class="upload-filename" id="upload-filename" style="display:none"></div>
+    </div>
+    <div class="page-actions">
+      <button class="btn" onclick="nav('dashboard',document.querySelector('[data-nav=dashboard]'))">← Back</button>
+      <button class="btn btn-primary" id="analyse-btn" disabled onclick="analyseBrief()">✨ Analyse with AI →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. AI ASSIGNMENT SUMMARY -->
+<div class="page" id="page-summary">
+  <div class="page-title">AI Assignment Summary</div>
+  <div class="page-sub">Key requirements extracted from your brief (mock AI output)</div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="flex-between">
+      <div>
+        <div style="font-size:18px;font-weight:700" id="summary-title">Assignment 3 — AI Study Planner Prototype</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:4px">COSC2960 · Due 14 June 2026</div>
+      </div>
+      <span class="badge b-blue">AI Generated</span>
+    </div>
+    <ul class="summary-list">
+      <li><strong>Assessment type</strong><span>Group project — progressive submission + final report</span></li>
+      <li><strong>Word limit</strong><span>2,500 words (final report)</span></li>
+      <li><strong>Weighting</strong><span>40% of total course mark</span></li>
+      <li><strong>Key deliverables</strong><span>Clickable web prototype, responsible AI design note, group charter, peer review</span></li>
+      <li><strong>Submission 1 due</strong><span>24 May 2026 — Group Charter, Project Plan draft, Component 1</span></li>
+      <li><strong>Ethics requirement</strong><span>Must address algorithmic bias, privacy, and academic integrity (7 marks)</span></li>
+      <li><strong>Technical constraint</strong><span>No paid API — prototype only, demonstrate user interaction</span></li>
+    </ul>
+    <div class="ai-tip" style="margin-top:16px">
+      <div class="ai-tip-label">✨ AI Recommendation</div>
+      <div class="ai-tip-text">Prioritise the clickable prototype and ethics section this week. Allocate ~12 hours across 4 weeks: 4h prototype, 3h ethics, 3h report, 2h group coordination.</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn" onclick="nav('upload',document.querySelector('[data-nav=upload]'))">← Re-upload</button>
+      <button class="btn btn-primary" onclick="goToPlan()">Generate Weekly Study Plan →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. WEEKLY STUDY PLAN -->
+<div class="page" id="page-plan">
+  <div class="page-title">Weekly Study Plan</div>
+  <div class="page-sub">AI-generated plan for Assignment 3 — week of 26 May – 1 June 2026</div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="flex-between">
+      <div class="card-title" style="margin:0">Week of 26 May – 1 June 2026</div>
+      <span class="badge b-green">Based on your brief</span>
+    </div>
+    <div class="week-grid-wrap">
+    <div class="week-grid" style="margin-bottom:12px">
+      <div class="day-cell today"><div class="day-name">MON</div><div class="day-num">26</div><div class="day-block dm">2h</div></div>
+      <div class="day-cell"><div class="day-name">TUE</div><div class="day-num">27</div><div class="day-block dh">3h</div></div>
+      <div class="day-cell"><div class="day-name">WED</div><div class="day-num">28</div><div class="day-block dm">2h</div></div>
+      <div class="day-cell"><div class="day-name">THU</div><div class="day-num">29</div><div class="day-block dh">3.5h</div></div>
+      <div class="day-cell"><div class="day-name">FRI</div><div class="day-num">30</div><div class="day-block dm">2h</div></div>
+      <div class="day-cell"><div class="day-name">SAT</div><div class="day-num">31</div><div class="day-block dl">1h</div></div>
+      <div class="day-cell"><div class="day-name">SUN</div><div class="day-num">1</div><div class="day-block dr">Rest</div></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Monday 26 May — Detailed Plan</div>
+    <div class="timeline-item"><div class="t-time">9:00 AM</div><div class="t-dot" style="background:var(--blue)"></div><div class="t-content"><div class="t-title">Build clickable prototype pages</div><div class="t-sub"><span class="badge b-blue">COSC2960</span> 90 min · High priority</div></div></div>
+    <div class="timeline-item"><div class="t-time">11:00 AM</div><div class="t-dot" style="background:var(--purple)"></div><div class="t-content"><div class="t-title">Draft academic integrity section</div><div class="t-sub"><span class="badge b-purple">COSC2960</span> 45 min</div></div></div>
+    <div class="timeline-item"><div class="t-time">1:00 PM</div><div class="t-dot" style="background:#D1D5DB"></div><div class="t-content"><div class="t-title">Lunch break</div><div class="t-sub">60 min rest</div></div></div>
+    <div class="timeline-item"><div class="t-time">2:00 PM</div><div class="t-dot" style="background:var(--green)"></div><div class="t-content"><div class="t-title">Group meeting — review charter draft</div><div class="t-sub"><span class="badge b-green">Group 6</span> 30 min</div></div></div>
+    <div class="page-actions">
+      <button class="btn" onclick="nav('summary',document.querySelector('[data-nav=summary]'))">← Back to Summary</button>
+      <button class="btn btn-primary" onclick="nav('alerts',document.querySelector('[data-nav=alerts]'))">View deadline alerts →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 5. DEADLINE ALERTS (prototype simulation) -->
+<div class="page" id="page-alerts">
+  <div class="page-title">Alerts</div>
+  <div class="page-sub">Simulated weekly deadline reminders — production would use email / push notifications</div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Upcoming deadlines</div>
+    <div class="exam-item"><div class="exam-dot" style="background:var(--red)"></div><div style="flex:1"><div class="exam-name">Assignment 3 mock-up pages</div><div class="exam-sub">COSC2960 · Due in 3 days · 31 May 2026</div></div><span class="badge b-red">Due soon</span></div>
+    <div class="exam-item"><div class="exam-dot" style="background:var(--amber)"></div><div style="flex:1"><div class="exam-name">Weekly plan review — Assignment 3</div><div class="exam-sub">StudyMate workflow · Due in 5 days</div></div><span class="badge b-amber">This week</span></div>
+    <div class="exam-item"><div class="exam-dot" style="background:var(--blue)"></div><div style="flex:1"><div class="exam-name">Assignment 3 final submission</div><div class="exam-sub">COSC2960 · 14 June 2026, 11:59 PM</div></div><span class="badge b-blue">Scheduled</span></div>
+    <div class="ai-tip" style="margin-top:14px">
+      <div class="ai-tip-label">🔔 Prototype note</div>
+      <div class="ai-tip-text">These alerts are static UI only. A full release would send automatic reminders by email and push when weekly task deadlines approach.</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn" onclick="nav('plan',document.querySelector('[data-nav=plan]'))">← Back to Plan</button>
+      <button class="btn btn-primary" onclick="goToIntegrity()">Continue to Integrity Check →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. ACADEMIC INTEGRITY REMINDER -->
+<div class="page" id="page-integrity">
+  <div class="page-title">Academic Integrity Reminder</div>
+  <div class="page-sub">Before using AI study tools — understand your responsibilities at RMIT</div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">RMIT Academic Integrity Guidelines</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+      StudyMate AI is a <strong>planning assistant only</strong>. You remain responsible for all submitted work.<br><br>
+      • <strong>Do not</strong> submit AI-generated text as your own writing without disclosure<br>
+      • <strong>Do</strong> use AI to organise tasks, summarise briefs, and plan study time<br>
+      • <strong>Always</strong> check your course's AI policy before using any tool<br>
+      • <strong>Declare</strong> AI assistance where required by your assessment brief<br>
+      • <strong>Verify</strong> all AI summaries against the original assignment document
+    </div>
+    <div class="card-title">Responsible AI Use for This Project</div>
+    <div class="risk-item"><div class="risk-icon" style="background:#FEE2E2">⚠️</div><div><div style="font-size:14px;font-weight:600">Misrepresentation</div><div style="font-size:13px;color:var(--text2)">Presenting AI output as original analysis without attribution may constitute academic misconduct.</div></div></div>
+    <div class="risk-item"><div class="risk-icon" style="background:#FEF3C7">📝</div><div><div style="font-size:14px;font-weight:600">Over-reliance</div><div style="font-size:13px;color:var(--text2)">Use StudyMate for planning — complete your own reading, coding, and writing.</div></div></div>
+    <label class="integrity-check">
+      <input type="checkbox" id="integrity-agree">
+      <span style="font-size:14px">I understand that StudyMate AI provides study planning support only. I will follow RMIT academic integrity policies and my course AI guidelines for all assessments.</span>
+    </label>
+    <div class="page-actions">
+      <button class="btn" onclick="nav('plan',document.querySelector('[data-nav=plan]'))">← Back</button>
+      <button class="btn btn-primary" onclick="goToFeedback()">I Understand — Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. FEEDBACK / EDIT PLAN -->
+<div class="page" id="page-feedback">
+  <div class="page-title">Feedback / Edit Plan</div>
+  <div class="page-sub">Rate your experience and adjust your study plan</div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Your Feedback</div>
+      <div class="form-group">
+        <label class="form-label">How helpful was the AI summary and plan?</label>
+        <div class="star-rating" id="star-rating">
+          <span onclick="setRating(1)">☆</span>
+          <span onclick="setRating(2)">☆</span>
+          <span onclick="setRating(3)">☆</span>
+          <span onclick="setRating(4)">☆</span>
+          <span onclick="setRating(5)">☆</span>
+        </div>
+        <input type="hidden" id="rating-val" value="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comments (optional)</label>
+        <textarea placeholder="What worked well? What could be improved?"></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="saveFeedback()">Submit Feedback</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Edit Your Study Plan</div>
+      <div class="form-group">
+        <label class="form-label">Available study hours per day</label>
+        <input type="number" id="edit-hours" value="3" min="1" max="12">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Focus area</label>
+        <select>
+          <option>Prototype development (COSC2960)</option>
+          <option>Ethics & report writing</option>
+          <option>Balanced across all courses</option>
+        </select>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Current plan: <strong id="plan-hours-label">3h/day</strong> focused on Assignment 3</div>
+      <button class="btn btn-primary btn-full" onclick="applyPlanEdit()">Apply Changes to Plan</button>
+      <div class="page-actions" style="margin-top:16px">
+        <button class="btn" onclick="nav('dashboard',document.querySelector('[data-nav=dashboard]'))">← Back to Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="login-modal" id="login-modal">
+  <div class="login-card">
+    <div class="login-step" id="login-step-canvas">
+      <div class="canvas-brand">
+        <div class="canvas-logo">Canvas</div>
+        <div class="canvas-institution">RMIT University</div>
+      </div>
+      <p class="login-desc">Sign in with your RMIT Canvas account to access StudyMate AI.</p>
+      <button class="btn btn-canvas btn-full" type="button" onclick="showLoginForm()">Log in with Canvas</button>
+      <p class="login-note">Prototype — no real authentication. Click to continue.</p>
+    </div>
+    <div class="login-step hidden" id="login-step-form">
+      <div class="canvas-brand compact">
+        <div class="canvas-logo">Canvas</div>
+        <div class="canvas-institution">RMIT University</div>
+      </div>
+      <h2 class="login-form-title">Sign in</h2>
+      <form id="login-form" onsubmit="submitLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-name">Full name</label>
+          <input type="text" id="login-name" placeholder="e.g. Alex Smith" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-student-id">Student number</label>
+          <input type="text" id="login-student-id" placeholder="e.g. s1234567" required autocomplete="off">
+        </div>
+        <button class="btn btn-canvas btn-full" type="submit">Sign in</button>
+        <button class="btn btn-text btn-full" type="button" onclick="showCanvasStep()">← Back</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
     <div class="metric"><div class="metric-icon">✅</div><div class="metric-val" id="done-count">2/5</div><div class="metric-label">Tasks Done Today</div></div>
     <div class="metric"><div class="metric-icon">📋</div><div class="metric-val">1</div><div class="metric-label">Briefs Analysed</div></div>
     <div class="metric"><div class="metric-icon">🎯</div><div class="metric-val">78%</div><div class="metric-label">Overall Readiness</div></div>
