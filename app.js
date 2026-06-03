@@ -7,6 +7,56 @@ function nav(id, el) {
   closeSidebar();
 }
 
+function getInitials(name) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return '?';
+}
+
+function getFirstName(name) {
+  return name.trim().split(/\s+/)[0] || name;
+}
+
+function applyUserProfile(name, studentId) {
+  document.getElementById('user-greeting-name').textContent = getFirstName(name);
+  document.getElementById('user-display-name').textContent = name.trim();
+  document.getElementById('user-student-id').textContent = studentId.trim();
+  document.getElementById('user-avatar-initials').textContent = getInitials(name);
+}
+
+function showCanvasStep() {
+  document.getElementById('login-step-canvas').classList.remove('hidden');
+  document.getElementById('login-step-form').classList.add('hidden');
+}
+
+function showLoginForm() {
+  document.getElementById('login-step-canvas').classList.add('hidden');
+  document.getElementById('login-step-form').classList.remove('hidden');
+  document.getElementById('login-name').focus();
+}
+
+function submitLogin(e) {
+  e.preventDefault();
+  const name = document.getElementById('login-name').value.trim();
+  const studentId = document.getElementById('login-student-id').value.trim();
+  if (!name || !studentId) return;
+  sessionStorage.setItem('studymate-user', JSON.stringify({ name, studentId }));
+  applyUserProfile(name, studentId);
+  document.getElementById('login-modal').classList.add('hidden');
+}
+
+function initLogin() {
+  const saved = sessionStorage.getItem('studymate-user');
+  if (saved) {
+    const { name, studentId } = JSON.parse(saved);
+    applyUserProfile(name, studentId);
+    document.getElementById('login-modal').classList.add('hidden');
+  }
+}
+
+initLogin();
+
 function toggleSidebar() {
   const open = document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open', open);
