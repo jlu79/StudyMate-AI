@@ -46,6 +46,13 @@ function submitLogin(e) {
   document.getElementById('login-modal').classList.add('hidden');
 }
 
+function clearUserProfile() {
+  document.getElementById('user-greeting-name').textContent = 'Student';
+  document.getElementById('user-display-name').textContent = 'Student';
+  document.getElementById('user-student-id').textContent = '—';
+  document.getElementById('user-avatar-initials').textContent = '?';
+}
+
 function initLogin() {
   const saved = sessionStorage.getItem('studymate-user');
   if (saved) {
@@ -53,6 +60,16 @@ function initLogin() {
     applyUserProfile(name, studentId);
     document.getElementById('login-modal').classList.add('hidden');
   }
+}
+
+function logout() {
+  sessionStorage.removeItem('studymate-user');
+  clearUserProfile();
+  document.getElementById('login-form').reset();
+  showCanvasStep();
+  document.getElementById('login-modal').classList.remove('hidden');
+  closeSidebar();
+  nav('dashboard', document.querySelector('[data-nav=dashboard]'));
 }
 
 initLogin();
