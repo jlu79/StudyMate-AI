@@ -226,3 +226,20 @@ textarea:focus{border-color:var(--green)}
   .main{padding:12px;padding-top:64px}
   .logo-sub{display:none}
 }
+
+/* CANVAS LOGIN MODAL */
+.login-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:300;backdrop-filter:blur(4px)}
+.login-modal.hidden{display:none}
+.login-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.login-step.hidden{display:none}
+.canvas-brand{text-align:center;margin-bottom:24px}
+.canvas-brand.compact{margin-bottom:20px}
+.canvas-logo{font-size:36px;font-weight:800;color:#E72429;letter-spacing:-.02em;line-height:1}
+.canvas-institution{font-size:14px;color:var(--text2);margin-top:8px;font-weight:500}
+.login-desc{font-size:14px;color:var(--text2);text-align:center;line-height:1.6;margin-bottom:24px}
+.login-note{font-size:12px;color:var(--text2);text-align:center;margin-top:16px;line-height:1.5}
+.login-form-title{font-size:20px;font-weight:700;margin-bottom:20px;text-align:center}
+.btn-canvas{background:#E72429;color:#fff;border-color:#E72429;padding:12px 18px;font-size:15px}
+.btn-canvas:hover{background:#C91F24;border-color:#C91F24}
+.btn-text{background:none;border:none;color:var(--text2);margin-top:8px;font-weight:500}
+.btn-text:hover{background:#F3F4F6;color:var(--text)}
